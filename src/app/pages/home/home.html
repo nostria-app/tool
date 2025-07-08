@@ -1,1 +1,105 @@
-<p>home works!</p>
+<div class="container">
+  <h1>Nostria Tool</h1>
+  <p class="subtitle">Convert between Nostr formats (hex, npub, nevent, nprofile)</p>
+
+  <!-- Event Converter -->
+  <div class="converter-section">
+    <h2>Event Converter</h2>
+    <div class="converter-card">
+      <div class="input-group">
+        <label for="eventHex">Event Hex</label>
+        <textarea 
+          id="eventHex" 
+          [(ngModel)]="eventHex" 
+          placeholder="Enter event hex (64-character hexadecimal string)"
+          (input)="convertEventHex()"
+          rows="3"></textarea>
+      </div>
+      
+      <div class="input-group">
+        <label>Relays (optional, one per line)</label>
+        <textarea 
+          [(ngModel)]="eventRelays" 
+          placeholder="wss://relay1.example.com&#10;wss://relay2.example.com"
+          (input)="convertEventHex()"
+          rows="3"></textarea>
+      </div>
+      
+      <div class="output-group">
+        <label>nevent</label>
+        <div class="output-container">
+          <textarea readonly [value]="neventOutput" rows="3" title="Generated nevent output" placeholder="nevent output will appear here"></textarea>
+          <button (click)="copyToClipboard(neventOutput)" [disabled]="!neventOutput">Copy</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Public Key Converter -->
+  <div class="converter-section">
+    <h2>Public Key Converter</h2>
+    <div class="converter-card">
+      <div class="input-group">
+        <label>Input</label>
+        <textarea 
+          [(ngModel)]="pubkeyInput" 
+          placeholder="Enter hex public key or npub"
+          (input)="convertPubkey()"
+          rows="2"></textarea>
+      </div>
+      
+      <div class="output-group">
+        <label>Hex Public Key</label>
+        <div class="output-container">
+          <textarea readonly [value]="hexPubkeyOutput" rows="2" title="Hex public key output" placeholder="Hex public key will appear here"></textarea>
+          <button (click)="copyToClipboard(hexPubkeyOutput)" [disabled]="!hexPubkeyOutput">Copy</button>
+        </div>
+      </div>
+      
+      <div class="output-group">
+        <label>npub</label>
+        <div class="output-container">
+          <textarea readonly [value]="npubOutput" rows="2" title="npub output" placeholder="npub will appear here"></textarea>
+          <button (click)="copyToClipboard(npubOutput)" [disabled]="!npubOutput">Copy</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Profile Converter -->
+  <div class="converter-section">
+    <h2>Profile Converter (nprofile)</h2>
+    <div class="converter-card">
+      <div class="input-group">
+        <label>Public Key</label>
+        <textarea 
+          [(ngModel)]="profilePubkey" 
+          placeholder="Enter hex public key or npub"
+          (input)="convertProfile()"
+          rows="2"></textarea>
+      </div>
+      
+      <div class="input-group">
+        <label>Relays (optional, one per line)</label>
+        <textarea 
+          [(ngModel)]="profileRelays" 
+          placeholder="wss://relay1.example.com&#10;wss://relay2.example.com"
+          (input)="convertProfile()"
+          rows="3"></textarea>
+      </div>
+      
+      <div class="output-group">
+        <label>nprofile</label>
+        <div class="output-container">
+          <textarea readonly [value]="nprofileOutput" rows="3" title="nprofile output" placeholder="nprofile will appear here"></textarea>
+          <button (click)="copyToClipboard(nprofileOutput)" [disabled]="!nprofileOutput">Copy</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Error Display -->
+  <div class="error-message" *ngIf="errorMessage">
+    {{ errorMessage }}
+  </div>
+</div>
