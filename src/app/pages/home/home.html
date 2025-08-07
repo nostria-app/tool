@@ -2,6 +2,88 @@
   <h1>Nostria Tool</h1>
   <p class="subtitle">Convert between Nostr formats (hex, npub, nevent, nprofile)</p>
 
+  <!-- Generic Converter -->
+  <div class="converter-section">
+    <h2>Generic Converter</h2>
+    <div class="converter-card">
+      <div class="input-group">
+        <label>Input (Auto-detect format)</label>
+        <textarea 
+          [(ngModel)]="genericInput" 
+          placeholder="Paste any Nostr format: nevent, npub, nprofile, nsec, note, naddr, or hex"
+          (input)="convertGeneric()"
+          rows="3"></textarea>
+      </div>
+      
+      <div class="output-group" *ngIf="genericOutput">
+        <label>Decoded Information</label>
+        <div class="generic-output">
+          <div class="output-item">
+            <span class="output-label">Type:</span>
+            <span class="output-value">{{ genericOutput.type }}</span>
+          </div>
+          <div class="output-item" *ngIf="genericOutput.type === 'npub' || genericOutput.type === 'note' || genericOutput.type === 'nsec'">
+            <span class="output-label">Hex:</span>
+            <div class="output-container">
+              <textarea readonly [value]="genericOutput.hex" rows="2" title="Hex value output"></textarea>
+              <button (click)="copyToClipboard(genericOutput.hex!)">Copy</button>
+            </div>
+          </div>
+          <div class="output-item" *ngIf="genericOutput.type === 'nevent'">
+            <span class="output-label">Event ID:</span>
+            <div class="output-container">
+              <textarea readonly [value]="genericOutput.id" rows="2" title="Event ID output"></textarea>
+              <button (click)="copyToClipboard(genericOutput.id!)">Copy</button>
+            </div>
+          </div>
+          <div class="output-item" *ngIf="genericOutput.type === 'nprofile'">
+            <span class="output-label">Public Key:</span>
+            <div class="output-container">
+              <textarea readonly [value]="genericOutput.pubkey" rows="2" title="Public key output"></textarea>
+              <button (click)="copyToClipboard(genericOutput.pubkey!)">Copy</button>
+            </div>
+          </div>
+          <div class="output-item" *ngIf="genericOutput.type === 'naddr'">
+            <span class="output-label">Identifier:</span>
+            <div class="output-container">
+              <textarea readonly [value]="genericOutput.identifier" rows="1" title="Identifier output"></textarea>
+              <button (click)="copyToClipboard(genericOutput.identifier!)">Copy</button>
+            </div>
+          </div>
+          <div class="output-item" *ngIf="genericOutput.type === 'naddr'">
+            <span class="output-label">Public Key:</span>
+            <div class="output-container">
+              <textarea readonly [value]="genericOutput.pubkey" rows="2" title="Public key output"></textarea>
+              <button (click)="copyToClipboard(genericOutput.pubkey!)">Copy</button>
+            </div>
+          </div>
+          <div class="output-item" *ngIf="genericOutput.author">
+            <span class="output-label">Author:</span>
+            <div class="output-container">
+              <textarea readonly [value]="genericOutput.author" rows="2" title="Author output"></textarea>
+              <button (click)="copyToClipboard(genericOutput.author!)">Copy</button>
+            </div>
+          </div>
+          <div class="output-item" *ngIf="genericOutput.kind !== undefined">
+            <span class="output-label">Kind:</span>
+            <span class="output-value">{{ genericOutput.kind }}</span>
+          </div>
+          <div class="output-item" *ngIf="genericOutput.relays && genericOutput.relays.length > 0">
+            <span class="output-label">Relays:</span>
+            <div class="relay-list">
+              <div *ngFor="let relay of genericOutput.relays" class="relay-item">
+                <div class="output-container">
+                  <textarea readonly [value]="relay" rows="1" title="Relay URL output"></textarea>
+                  <button (click)="copyToClipboard(relay)">Copy</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Event Converter -->
   <div class="converter-section">
     <h2>Event Converter</h2>

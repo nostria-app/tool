@@ -136,6 +136,56 @@ button:disabled {
   box-shadow: 0 2px 4px rgba(231, 76, 60, 0.3);
 }
 
+/* Generic converter specific styles */
+.generic-output {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 1.5rem;
+  border: 1px solid #e1e8ed;
+}
+
+.output-item {
+  margin-bottom: 1.5rem;
+}
+
+.output-item:last-child {
+  margin-bottom: 0;
+}
+
+.output-label {
+  display: inline-block;
+  font-weight: 600;
+  color: #2c3e50;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.5rem;
+  min-width: 120px;
+}
+
+.output-value {
+  display: inline-block;
+  background: #3498db;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  font-weight: 500;
+  font-size: 0.85rem;
+  margin-left: 0.5rem;
+}
+
+.relay-list {
+  margin-top: 0.5rem;
+}
+
+.relay-item {
+  margin-bottom: 0.5rem;
+}
+
+.relay-item:last-child {
+  margin-bottom: 0;
+}
+
 /* Responsive design */
 @media (max-width: 768px) {
   .container {
@@ -207,5 +257,19 @@ button:disabled {
   
   textarea::placeholder {
     color: #777;
+  }
+  
+  .generic-output {
+    background: #333;
+    border-color: #555;
+  }
+  
+  .output-label {
+    color: #e1e1e1;
+  }
+  
+  .output-value {
+    background: #3498db;
+    color: white;
   }
 }

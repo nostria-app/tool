@@ -3,6 +3,17 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { nip19 } from 'nostr-tools';
 
+interface GenericOutput {
+  type: string;
+  hex?: string;
+  id?: string;
+  pubkey?: string;
+  identifier?: string;
+  author?: string;
+  kind?: number;
+  relays?: string[];
+}
+
 @Component({
   selector: 'app-home',
   imports: [FormsModule, CommonModule],
@@ -10,6 +21,10 @@ import { nip19 } from 'nostr-tools';
   styleUrl: './home.css'
 })
 export class Home {
+  // Generic converter properties
+  genericInput = '';
+  genericOutput: GenericOutput | null = null;
+
   // Event converter properties
   eventHex = '';
   eventRelays = '';
@@ -27,6 +42,95 @@ export class Home {
 
   // Error handling
   errorMessage = '';
+
+  convertGeneric(): void {
+    this.clearError();
+    
+    if (!this.genericInput.trim()) {
+      this.genericOutput = null;
+      return;
+    }
+
+    try {
+      const input = this.genericInput.trim();
+      
+      // Check if it's a raw hex string (64 characters)
+      if (/^[a-fA-F0-9]{64}$/.test(input)) {
+        this.genericOutput = {
+          type: 'hex',
+          hex: input
+        };
+        return;
+      }
+
+      // Check if it starts with 'nostr:' and remove it
+      let cleanInput = input;
+      if (input.startsWith('nostr:')) {
+        cleanInput = input.substring(6);
+      }
+
+      // Try to decode using nip19
+      const decoded = nip19.decode(cleanInput);
+      
+      switch (decoded.type) {
+        case 'npub':
+          this.genericOutput = {
+            type: 'npub',
+            hex: decoded.data
+          };
+          break;
+          
+        case 'nsec':
+          this.genericOutput = {
+            type: 'nsec',
+            hex: Array.from(decoded.data).map(b => b.toString(16).padStart(2, '0')).join('')
+          };
+          break;
+          
+        case 'note':
+          this.genericOutput = {
+            type: 'note',
+            hex: decoded.data
+          };
+          break;
+          
+        case 'nevent':
+          this.genericOutput = {
+            type: 'nevent',
+            id: decoded.data.id,
+            author: decoded.data.author,
+            kind: decoded.data.kind,
+            relays: decoded.data.relays
+          };
+          break;
+          
+        case 'nprofile':
+          this.genericOutput = {
+            type: 'nprofile',
+            pubkey: decoded.data.pubkey,
+            relays: decoded.data.relays
+          };
+          break;
+          
+        case 'naddr':
+          this.genericOutput = {
+            type: 'naddr',
+            identifier: decoded.data.identifier,
+            pubkey: decoded.data.pubkey,
+            kind: decoded.data.kind,
+            relays: decoded.data.relays
+          };
+          break;
+          
+        default:
+          this.setError(`Unknown format type: ${(decoded as any).type}`);
+          this.genericOutput = null;
+      }
+    } catch (error) {
+      this.setError(`Error decoding input: ${error}`);
+      this.genericOutput = null;
+    }
+  }
 
   convertEventHex(): void {
     this.clearError();
